@@ -1,0 +1,31 @@
+# Maven
+/target
+!.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# Java
+*.class
+
+# Archivo de propiedades sensibles (solo si aplica)
+# /src/main/resources/application-local.properties
