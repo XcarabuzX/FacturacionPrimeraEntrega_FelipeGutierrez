@@ -3,18 +3,28 @@ package com.coldflame.farmacia.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.*;
 
 @Entity
+@Table(name = "venta")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private LocalDate fecha;
-    private Double total;
+    
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha = LocalDate.now();
+    
+    @Column(name = "total", nullable = false)
+    private Double total = 0.0;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
     @ManyToMany
@@ -24,23 +34,4 @@ public class Venta {
         inverseJoinColumns = @JoinColumn(name = "producto_id")
     )
     private List<Producto> productos;
-
-    public Venta() {
-    }
-
-    // Getters y setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public LocalDate getFecha() { return fecha; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
-
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
-
-    public Cliente getCliente() { return cliente; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
-
-    public List<Producto> getProductos() { return productos; }
-    public void setProductos(List<Producto> productos) { this.productos = productos; }
 }
