@@ -5,6 +5,7 @@ import com.coldflame.farmacia.repository.ProductoRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/productos")
@@ -16,15 +17,29 @@ public class ProductoController {
         this.productoRepository = productoRepository;
     }
 
-    // GET /productos → listar todos los productos
     @GetMapping
     public List<Producto> listarProductos() {
         return productoRepository.findAll();
     }
 
-    // POST /productos → crear un nuevo producto
+    @GetMapping("/{id}")
+    public Optional<Producto> obtenerProducto(@PathVariable Long id) {
+        return productoRepository.findById(id);
+    }
+
     @PostMapping
     public Producto crearProducto(@RequestBody Producto producto) {
         return productoRepository.save(producto);
+    }
+
+    @PutMapping("/{id}")
+    public Producto actualizarProducto(@PathVariable Long id, @RequestBody Producto productoActualizado) {
+        productoActualizado.setId(id);
+        return productoRepository.save(productoActualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarProducto(@PathVariable Long id) {
+        productoRepository.deleteById(id);
     }
 }
