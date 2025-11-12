@@ -1,6 +1,6 @@
 # 💊 Proyecto Farmacia - Sistema de Gestión
 
-Este es un proyecto básico de sistema de gestión para una farmacia, desarrollado con **Spring Boot**, **JPA**, y **MySQL** como base de datos. Forma parte de una entrega académica de programación orientada a objetos y sistemas web con Java.
+Este es un sistema de gestión básico para una farmacia, desarrollado con **Java 17**, **Spring Boot** y **MySQL**. Permite administrar clientes, productos y ventas de forma eficiente. Es parte de una entrega académica de desarrollo web y programación orientada a objetos.
 
 ---
 
@@ -8,16 +8,43 @@ Este es un proyecto básico de sistema de gestión para una farmacia, desarrolla
 
 - Java 17
 - Spring Boot 3.1+
-- Spring Data JPA
+- Spring Data JPA (Hibernate)
 - MySQL
 - Maven
+- Postman (para pruebas de API)
 
 ---
 
-## 📄 Configuración
+## 🧩 Módulos Implementados
 
-En el archivo `application.properties` la configuración debe ser la siguiente:
+### Clientes
+- Registro, listado, edición y eliminación de clientes.
 
+### Productos
+- Registro, listado, edición y eliminación de productos.
+
+### Ventas
+- Registrar ventas asociadas a un cliente y uno o varios productos.
+- Obtener lista de ventas.
+- Obtener venta por ID.
+- Eliminar venta.
+
+---
+
+## 🗃️ Entidades Relacionales
+
+- `Cliente` ←→ `Venta` (1:N)
+- `Producto` ←→ `Venta` (N:M)
+
+Las relaciones se manejan automáticamente mediante JPA, y las operaciones CRUD están expuestas a través de controladores REST.
+
+---
+
+## 🔌 Configuración del proyecto
+
+Asegúrate de tener tu base de datos MySQL corriendo y crea una base llamada `farmacia`.
+
+### 📄 `application.properties`
 ```properties
 spring.application.name=farmacia
 
@@ -31,7 +58,6 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 
 server.port=8085
-```
 
 > ⚠️ Reemplaza `TU_CONTRASEÑA` por la contraseña real del usuario `root` de MySQL.
 
