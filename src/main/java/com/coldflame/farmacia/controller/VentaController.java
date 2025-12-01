@@ -1,7 +1,11 @@
 package com.coldflame.farmacia.controller;
 
 import com.coldflame.farmacia.dto.VentaDTO;
+import com.coldflame.farmacia.dto.VentaRequestDTO;
+import com.coldflame.farmacia.dto.VentaResponseDTO;
+import com.coldflame.farmacia.exception.ValidationException;
 import com.coldflame.farmacia.responses.ErrorResponse;
+import com.coldflame.farmacia.responses.ValidationErrorResponse;
 import com.coldflame.farmacia.service.VentaService;
 
 import org.springframework.http.HttpStatus;
@@ -36,28 +40,29 @@ public class VentaController {
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerVentaPorId(@PathVariable Long id) {
         try {
-        	var ventaOpt = ventaService.obtenerVentaPorId(id);
-        	if (ventaOpt.isPresent()) {
-        	    return ResponseEntity.ok(ventaOpt.get());
-        	} else {
-        	    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        	            .body(new ErrorResponse("No encontrada", "La venta con ID " + id + " no existe"));
-        	}
+            var ventaOpt = ventaService.obtenerVentaPorId(id);
+            if (ventaOpt.isPresent()) {
+                return ResponseEntity.ok(ventaOpt.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ErrorResponse("No encontrada", "La venta con ID " + id + " no existe"));
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error al obtener venta", e.getMessage()));
         }
     }
 
-    // POST /ventas → crear una nueva venta (usando DTO)
+    // POST /ventas → crear una nueva venta con validaciones
     @PostMapping
-    public ResponseEntity<?> crearVenta(@RequestBody VentaDTO ventaDTO) {
+    public ResponseEntity<?> crearVenta(@RequestBody VentaRequestDTO ventaRequest) {
         try {
-            VentaDTO nuevaVenta = ventaService.crearVenta(ventaDTO);
+            VentaResponseDTO nuevaVenta = ventaService.crearVenta(ventaRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaVenta);
-        } catch (RuntimeException e) {
+        } catch (ValidationException e) {
+            // Errores de validación (cliente no existe, stock insuficiente, etc.)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse("Error de validación", e.getMessage()));
+                    .body(new ValidationErrorResponse("Errores de validación", e.getErrors()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error al crear venta", e.getMessage()));

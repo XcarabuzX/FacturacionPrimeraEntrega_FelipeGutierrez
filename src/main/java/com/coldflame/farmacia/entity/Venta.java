@@ -1,7 +1,7 @@
 package com.coldflame.farmacia.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -16,22 +16,20 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "fecha", nullable = false)
-    private LocalDate fecha = LocalDate.now();
-    
+    private String fecha;
+
     @Column(name = "total", nullable = false)
     private Double total = 0.0;
+
+    @Column(name = "cantidad_productos", nullable = false)
+    private Integer cantidadProductos = 0;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @ManyToMany
-    @JoinTable(
-        name = "venta_producto",
-        joinColumns = @JoinColumn(name = "venta_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
-    private List<Producto> productos;
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LineaVenta> lineas = new ArrayList<>();
 }

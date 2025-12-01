@@ -1,20 +1,18 @@
 package com.coldflame.farmacia.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class VentaDTO {
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class VentaResponseDTO {
     private Long id;
     private String fecha;
     private Double total;
     private Integer cantidadProductos;
-
-    private Long clienteId;
-    private String clienteNombre;
+    private ClienteResponseDTO cliente;
     private List<LineaVentaResponseDTO> lineas;
 }
